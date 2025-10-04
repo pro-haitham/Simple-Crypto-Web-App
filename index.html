@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Simple Crypto Web App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Simple Crypto Web App</h1>
+    <nav>
+      <button data-target="ciphers">Classical Ciphers</button>
+      <button data-target="password">Password Analyzer</button>
+      <button data-target="password-gen">Password Generator</button>
+      <button data-target="file">File Encryptor</button>
+      <button data-target="hash">Hashing Tool</button>
+      <button data-target="manager">Password Manager</button>
+      <button data-target="vault">Vault / Safe</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Classical Ciphers -->
+    <section id="ciphers" class="panel">
+      <h2>Classical Ciphers</h2>
+      <!-- Caesar Cipher -->
+      <div class="cipher-card">
+        <h3>Caesar Cipher</h3>
+        <textarea id="caesar-input" placeholder="Enter text..."></textarea>
+        <div class="row">
+          <label>Shift: <input id="caesar-shift" type="number" value="3" min="0" /></label>
+          <select id="caesar-mode">
+            <option value="encrypt">Encrypt</option>
+            <option value="decrypt">Decrypt</option>
+          </select>
+          <button id="caesar-go">Run</button>
+        </div>
+        <textarea id="caesar-output" placeholder="Result..." readonly></textarea>
+      </div>
+
+      <!-- Vigenère Cipher -->
+      <div class="cipher-card">
+        <h3>Vigenère Cipher</h3>
+        <textarea id="vigenere-input" placeholder="Enter text..."></textarea>
+        <div class="row">
+          <label>Key: <input id="vigenere-key" type="text" /></label>
+          <select id="vigenere-mode">
+            <option value="encrypt">Encrypt</option>
+            <option value="decrypt">Decrypt</option>
+          </select>
+          <button id="vigenere-go">Run</button>
+        </div>
+        <textarea id="vigenere-output" readonly></textarea>
+      </div>
+
+      <!-- Playfair Cipher -->
+      <div class="cipher-card">
+        <h3>Playfair Cipher</h3>
+        <p class="note">Playfair uses a 5x5 key square (J merged with I).</p>
+        <textarea id="playfair-input" placeholder="Enter text..."></textarea>
+        <div class="row">
+          <label>Key: <input id="playfair-key" type="text" /></label>
+          <select id="playfair-mode">
+            <option value="encrypt">Encrypt</option>
+            <option value="decrypt">Decrypt</option>
+          </select>
+          <button id="playfair-go">Run</button>
+        </div>
+        <textarea id="playfair-output" readonly></textarea>
+      </div>
+    </section>
+
+    <!-- Password Analyzer -->
+    <section id="password" class="panel" hidden>
+      <h2>Password Strength Analyzer</h2>
+      <input id="password-input" type="password" placeholder="Type a password..." />
+      <div class="row"><button id="pwd-check">Check Strength</button></div>
+      <div id="pwd-results" class="card">
+        <p id="pwd-score">Score: —</p>
+        <p id="pwd-strength">Strength: —</p>
+        <div id="pwd-bar" class="bar"><div id="pwd-bar-fill"></div></div>
+        <p id="pwd-estimate">Crack time estimate: —</p>
+        <p id="pwd-notes"></p>
+      </div>
+    </section>
+
+    <!-- Password Generator -->
+    <section id="password-gen" class="panel" hidden>
+      <h2>Password Generator</h2>
+      <div class="box">
+        <label>Password Length: <input type="number" id="gen-length" value="12" min="4" max="64"></label>
+        <label><input type="checkbox" id="gen-uppercase" checked> Include Uppercase</label>
+        <label><input type="checkbox" id="gen-lowercase" checked> Include Lowercase</label>
+        <label><input type="checkbox" id="gen-numbers" checked> Include Numbers</label>
+        <label><input type="checkbox" id="gen-symbols" checked> Include Symbols</label>
+        <button id="generate-password">Generate Password</button>
+        <button id="generate-to-vault">Save to Vault</button>
+      </div>
+      <div class="box">
+        <label>Generated Password:</label>
+        <input type="text" id="generated-password" readonly>
+        <button id="copy-password">Copy</button>
+      </div>
+    </section>
+
+    <!-- File Encryptor -->
+    <section id="file" class="panel" hidden>
+      <h2>File Encryptor / Decryptor (AES-256-CBC)</h2>
+      <form id="file-form" method="post" action="file_crypto.php" enctype="multipart/form-data" target="_blank">
+        <div class="row"><label>File: <input name="userfile" type="file" required /></label></div>
+        <div class="row"><label>Password: <input name="passphrase" type="password" required /></label></div>
+        <div class="row">
+          <select name="mode">
+            <option value="encrypt">Encrypt</option>
+            <option value="decrypt">Decrypt</option>
+          </select>
+          <button type="submit">Upload & Process</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Hashing Tool -->
+    <section id="hash" class="panel" hidden>
+      <h2>Hashing Tool</h2>
+      <div class="box">
+        <h3>Hash Generator</h3>
+        <form method="POST" action="hashing.php" target="_blank">
+          <label>Enter Text:</label>
+          <textarea name="hashText" required></textarea>
+          <label>Algorithm:</label>
+          <select name="algorithm">
+            <option value="md5">MD5</option>
+            <option value="sha1">SHA1</option>
+            <option value="sha256">SHA256</option>
+            <option value="sha512">SHA512</option>
+          </select>
+          <button type="submit">Generate Hash</button>
+        </form>
+      </div>
+      <div class="box">
+        <h3>Hash Verifier</h3>
+        <form method="POST" action="hashing.php" target="_blank">
+          <label>Enter Text:</label>
+          <textarea name="verifyText" required></textarea>
+          <label>Algorithm:</label>
+          <select name="verifyAlgorithm">
+            <option value="md5">MD5</option>
+            <option value="sha1">SHA1</option>
+            <option value="sha256">SHA256</option>
+            <option value="sha512">SHA512</option>
+          </select>
+          <label>Enter Hash to Verify:</label>
+          <textarea name="verifyHash" required></textarea>
+          <button type="submit">Verify Hash</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Password Manager -->
+    <section id="manager" class="panel" hidden>
+      <h2>Password Manager</h2>
+      <div class="pm-container">
+        <div class="pm-card">
+          <h3>Save New Password</h3>
+          <form id="manager-form">
+            <label>Master Password:</label>
+            <input type="password" id="master-password" placeholder="Enter master password" required>
+            <label>Site / Account:</label>
+            <input type="text" id="pm-site" placeholder="e.g., Gmail" required>
+            <label>Password:</label>
+            <input type="password" id="pm-password" placeholder="Enter password to save" required>
+            <button type="button" id="generate-pwd" class="btn-gen">🔑 Generate Password</button>
+            <button type="submit" class="btn-save">💾 Save Password</button>
+          </form>
+        </div>
+        <div class="pm-actions">
+          <button id="view-passwords" class="btn-view">👁 View Stored Passwords</button>
+        </div>
+        <div class="pm-table-card">
+          <h3>Stored Passwords</h3>
+          <table id="pm-table">
+            <thead>
+              <tr>
+                <th>Site</th>
+                <th>Hashed (with Salt)</th>
+                <th>Password</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vault / Safe -->
+<section id="vault" class="panel" hidden>
+  <h2>My Safe / Vault</h2>
+
+  <div class="vault-container">
+
+    <!-- Master Password Input -->
+    <div class="vault-card">
+      <label>Master Password:</label>
+      <input type="password" id="vault-master" placeholder="Enter master password" required>
+    </div>
+
+    <!-- Upload File -->
+    <div class="vault-card">
+      <h3>Upload & Encrypt File</h3>
+      <form id="vault-form">
+        <label>Select File:</label>
+        <input type="file" id="vault-file" required>
+        <button type="submit">🔒 Add to Vault</button>
+      </form>
+    </div>
+
+    <!-- Add Note / Code Snippet -->
+    <div class="vault-card">
+      <h3>Add Note / Code Snippet</h3>
+      <textarea id="vault-note" placeholder="Enter your note or code here"></textarea>
+      <button id="vault-add-note">💾 Save Note</button>
+    </div>
+
+    <!-- Vault Table -->
+    <div class="vault-table-card">
+      <h3>Stored Items</h3>
+      <table id="vault-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Encrypted files / notes will appear here -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+
+  <footer>
+    <small>Simple demo — not for production. Use proper key management for real systems.</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
